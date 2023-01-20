@@ -31,7 +31,7 @@ def IsSuppressionStatementPresent( file_with_violation, line_number, rule_number
     # -1 for getting to the line above the line with violation.
     currentLineNumber = line_number - 2
 
-    print( file_with_violation )
+    #print( file_with_violation )
     with open( file_with_violation ) as fp:
         AllLines = fp.readlines()
         while True:
@@ -44,14 +44,14 @@ def IsSuppressionStatementPresent( file_with_violation, line_number, rule_number
             # Additionally, we need to subtract 1 more to get to the line above the line with violation.
             line = AllLines[ currentLineNumber ]
 
-            print( "Below is the line in the loop: " )
-            print( file_with_violation + str( currentLineNumber ) + line )
+            #print( "Below is the line in the loop: " )
+            #print( file_with_violation + str( currentLineNumber ) + line )
 
             if not line:
                 break
 
-            if "DHCP" in file_with_violation:
-                print(line)
+            #if "DHCP" in file_with_violation:
+            #    print(line)
 
             # Make sure that this is a comment that we are looking at.
             if line.lstrip().startswith('/*'):
@@ -79,16 +79,16 @@ def IsSuppressionStatementPresent( file_with_violation, line_number, rule_number
 def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_rules, list_of_suppressed_directives ):
     list_of_new_violations = []
 
-    print("Trying to open " + MISRA_report )
+    # print("Trying to open " + MISRA_report )
 
     with open( MISRA_report ) as report_fd:
-        print( "Opened MISRA report" )
+        #print( "Opened MISRA report" )
         while True:
             found_match = False
 
             line = report_fd.readline()
             
-            print( "Reading line: " + line )
+            # print( "Reading line: " + line )
 
             if not line:
                 report_fd.close()
@@ -113,7 +113,7 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
                 rule_number = line.split("misra-c2012-")[ 1 ]
                 rule_number = rule_number.split(']')[ 0 ]
                 
-                print( file_with_violation + ":" + str( line_number ) + " " + rule_number )
+                # print( file_with_violation + ":" + str( line_number ) + " " + rule_number )
 
                 # First see whether this violation is allowed (e.g. something which cppcheck doesn't quite understand).
                 if allowed_violations is not None:
@@ -134,23 +134,23 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
                         # Nothing to be found
                         pass
 
-                print( "***" + file_with_violation + ":" + str( line_number ) + "  " + rule_number )
+                # print( "***" + file_with_violation + ":" + str( line_number ) + "  " + rule_number )
                 # First try to find the rule in the list of suppressed rules in the coverity config.
                 if found_match is False:
-                    print("Nothing found.")
+                    # print("Nothing found.")
                     if list_of_suppressed_rules is not None:
                         if rule_number in list_of_suppressed_rules:
-                            print("Found it in the config file.")
+                            # print("Found it in the config file.")
                             found_match = True
             
                 # Otherwise try to look for coverity suppression statement.
                 if found_match is False:
-                    print("Checking in the file itself.")
+                    # print("Checking in the file itself.")
                     found_match = IsSuppressionStatementPresent( file_with_violation, line_number, rule_number )
 
                 if found_match is False:
-                    print("Not found anywhere.")
-                    #print( file_with_violation + ":" + str( line_number ) + "  " + rule_number )
+                    # print("Not found anywhere.")
+                    # print( file_with_violation + ":" + str( line_number ) + "  " + rule_number )
                     list_of_new_violations.append([file_with_violation, str( line_number ), rule_number])
                 else:
                     # print( file_with_violation + ":" + str( line_number ) + "  " + rule_number + "  Suppressed" )
@@ -162,7 +162,7 @@ if __name__ == "__main__":
     my_rule_list = []
     my_directive_list = []
 
-    print(sys.argv)
+    # print(sys.argv)
     assert( len(sys.argv) == 3 )
     print( "MISRA Config file provided: " + str( sys.argv[ 1 ] ) )
     print( "MISRA.md file provided: " + str( sys.argv[ 2 ] ) )
@@ -176,8 +176,8 @@ if __name__ == "__main__":
 
     my_rule_list, my_directive_list = parse_MISRA_config_file( MISRA_config_file, my_rule_list, my_directive_list )
     
-    print( "Rules suppressed in config file " + str( len( my_rule_list ) ) )
-    print( "Directives suppressed in config file " + str( len( my_directive_list ) ) )
+    # print( "Rules suppressed in config file " + str( len( my_rule_list ) ) )
+    # print( "Directives suppressed in config file " + str( len( my_directive_list ) ) )
 
     my_rule_list.sort()
 
@@ -190,3 +190,6 @@ if __name__ == "__main__":
     
     if len( new_violations ) > 0:
         print( tabulate( new_violations, headers=["File name", "Line number", "MISRA rule number"], colalign=("left", "center", "center") ) )
+        exit 1
+    else:
+        exit 0
