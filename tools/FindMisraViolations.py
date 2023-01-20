@@ -29,6 +29,7 @@ def IsSuppressionStatementPresent( file_with_violation, line_number, rule_number
     ViolationSuppressed = False
     currentLineNumber = line_number - 1
 
+    print( file_with_violation )
     with open( file_with_violation ) as fp:
         AllLines = fp.readlines()
         while True:
