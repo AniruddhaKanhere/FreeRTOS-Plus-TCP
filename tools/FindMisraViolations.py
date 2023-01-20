@@ -28,7 +28,7 @@ def parse_MISRA_config_file( MISRA_config_file_path, list_of_suppressed_rules, l
 def IsSuppressionStatementPresent( file_with_violation, line_number, rule_number ):
 
     ViolationSuppressed = False
-    currentLineNumber = line_number - 2
+    currentLineNumber = line_number - 1
 
     while True:
 
@@ -117,14 +117,18 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
                         # Nothing to be found
                         pass
 
+                print( file_with_violation + ":" + str( line_number ) + "  " + rule_number )
                 # First try to find the rule in the list of suppressed rules in the coverity config.
                 if found_match is False:
+                    print("Nothing found.")
                     if list_of_suppressed_rules is not None:
                         if rule_number in list_of_suppressed_rules:
+                            print("Found it in the config file.")
                             found_match = True
             
                 # Otherwise try to look for coverity suppression statement.
                 if found_match is False:
+                    print("Checking in the file itself.")
                     found_match = IsSuppressionStatementPresent( file_with_violation, line_number, rule_number )
 
                 if found_match is False:
@@ -148,9 +152,9 @@ if __name__ == "__main__":
     MISRA_config_file = str( sys.argv[ 1 ] )
     MISRA_report = str( sys.argv[ 2 ] )
 
-    allowed_violation = { "12.3":["*"],
-                          "FreeRTOS_ARP.c" : { "21.6":["35"], "11.8":[ '*' ] },
-                        }
+    allowed_violation = None #{ "12.3":["*"],
+                             #  "FreeRTOS_ARP.c" : { "21.6":["35"], "11.8":[ '*' ] },
+                             #}
 
     my_rule_list, my_directive_list = parse_MISRA_config_file( MISRA_config_file, my_rule_list, my_directive_list )
 
@@ -158,7 +162,7 @@ if __name__ == "__main__":
 
     my_directive_list.sort()
 
-    new_violations = find_new_violations( MISRA_report, None, my_rule_list, my_directive_list )
+    new_violations = find_new_violations( MISRA_report, allowed_violation, my_rule_list, my_directive_list )
     print( "Total new violation(s) introduced: " + str( len( new_violations ) ) )
     
     new_violations.sort()
