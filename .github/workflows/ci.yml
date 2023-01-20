@@ -94,8 +94,8 @@ jobs:
             PATH=$PATH:$PWD/cppcheck/build/bin
             echo $PWD
             ls
-            cppcheck --force --dump -I tcp/source/include $(find . -iwholename "tcp/source/FreeRTOS_*.c")
-            python3 cppcheck/addons/misra.py *.dump > tcp/output.txt 2>&1
+            cppcheck --force --dump -I ./tcp/source/include $(find . -iwholename "./tcp/source/FreeRTOS_*.c")
+            python3 cppcheck/addons/misra.py *.dump > ./tcp/output.txt 2>&1
             echo $PWD
        - name: Check report for new violations 
          run: |
