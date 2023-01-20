@@ -124,8 +124,8 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
                     found_match = IsSuppressionStatementPresent( file_with_violation, line_number, rule_number )
 
                 if found_match is False:
-                    print( file_with_violation + ":" + str( line_number ) + "  " + rule_number )
-                    list_of_new_violations.append(line)
+                    #print( file_with_violation + ":" + str( line_number ) + "  " + rule_number )
+                    list_of_new_violations.append([file_with_violation, str( line_number ), rule_number])
                 else:
                     # print( file_with_violation + ":" + str( line_number ) + "  " + rule_number + "  Suppressed" )
                     pass
@@ -155,4 +155,7 @@ if __name__ == "__main__":
     my_directive_list.sort()
 
     new_violations = find_new_violations( MISRA_report, None, my_rule_list, my_directive_list )
-    print( "Total new violation introduced: " + str( len( new_violations ) ) )
+    print( "Total new violation(s) introduced: " + str( len( new_violations ) ) )
+    
+    new_violations.sort()
+    print( tabulate( new_violations, headers=["File name", "Line number", "MISRA rule number"], colalign=("left", "center", "center") ) )
