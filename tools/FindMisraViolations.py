@@ -27,7 +27,9 @@ def parse_MISRA_config_file( MISRA_config_file_path, list_of_suppressed_rules, l
 def IsSuppressionStatementPresent( file_with_violation, line_number, rule_number ):
 
     ViolationSuppressed = False
-    currentLineNumber = line_number
+    # -1 for getting to current line as the counting starts from 0th index.
+    # -1 for getting to the line above the line with violation.
+    currentLineNumber = line_number - 2
 
     print( file_with_violation )
     with open( file_with_violation ) as fp:
