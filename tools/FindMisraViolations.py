@@ -190,6 +190,6 @@ if __name__ == "__main__":
     
     if len( new_violations ) > 0:
         print( tabulate( new_violations, headers=["File name", "Line number", "MISRA rule number"], colalign=("left", "center", "center") ) )
-        exit 1
+        exit(1)
     else:
-        exit 0
+        exit(0)
