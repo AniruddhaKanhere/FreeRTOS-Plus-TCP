@@ -4,7 +4,7 @@ import json
 from tabulate import tabulate
 
 def parse_MISRA_config_file( MISRA_config_file_path, list_of_suppressed_rules, list_of_suppressed_directives ):
-    
+
     with open( MISRA_config_file_path ) as config_file:
         data = json.load(config_file)
 
@@ -73,7 +73,7 @@ def IsSuppressionStatementPresent( file_with_violation, line_number, rule_number
             currentLineNumber -= 1
 
         fp.close()
-        
+
     return ViolationSuppressed
 
 def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_rules, list_of_suppressed_directives ):
@@ -87,7 +87,7 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
             found_match = False
 
             line = report_fd.readline()
-            
+
             # print( "Reading line: " + line )
 
             if not line:
@@ -112,7 +112,7 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
 
                 rule_number = line.split("misra-c2012-")[ 1 ]
                 rule_number = rule_number.split(']')[ 0 ]
-                
+
                 # print( file_with_violation + ":" + str( line_number ) + " " + rule_number )
 
                 # First see whether this violation is allowed (e.g. something which cppcheck doesn't quite understand).
@@ -142,7 +142,7 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
                         if rule_number in list_of_suppressed_rules:
                             # print("Found it in the config file.")
                             found_match = True
-            
+
                 # Otherwise try to look for coverity suppression statement.
                 if found_match is False:
                     # print("Checking in the file itself.")
@@ -155,7 +155,7 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
                 else:
                     # print( file_with_violation + ":" + str( line_number ) + "  " + rule_number + "  Suppressed" )
                     pass
-    
+
     return list_of_new_violations
 
 if __name__ == "__main__":
@@ -175,7 +175,7 @@ if __name__ == "__main__":
                              #}
 
     my_rule_list, my_directive_list = parse_MISRA_config_file( MISRA_config_file, my_rule_list, my_directive_list )
-    
+
     # print( "Rules suppressed in config file " + str( len( my_rule_list ) ) )
     # print( "Directives suppressed in config file " + str( len( my_directive_list ) ) )
 
@@ -185,9 +185,9 @@ if __name__ == "__main__":
 
     new_violations = find_new_violations( MISRA_report, allowed_violation, my_rule_list, my_directive_list )
     print( "Total new violation(s) introduced: " + str( len( new_violations ) ) )
-    
+
     new_violations.sort()
-    
+
     if len( new_violations ) > 0:
         print( tabulate( new_violations, headers=["File name", "Line number", "MISRA rule number"], colalign=("left", "center", "center") ) )
         exit(1)
