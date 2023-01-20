@@ -1,7 +1,6 @@
 import sys
 import argparse
 import json
-import linecache
 from tabulate import tabulate
 
 def parse_MISRA_config_file( MISRA_config_file_path, list_of_suppressed_rules, list_of_suppressed_directives ):
@@ -30,42 +29,47 @@ def IsSuppressionStatementPresent( file_with_violation, line_number, rule_number
     ViolationSuppressed = False
     currentLineNumber = line_number - 1
 
-    while True:
+    with open( file_with_violation ) as fp:
+        AllLines = fp.readlines()
+        while True:
 
-        # Make sure we do not go beyond the file.
-        if currentLineNumber < 0:
-            break
+            # Make sure we do not go beyond the file.
+            if currentLineNumber < 0:
+                break
 
-        # getline starts counting from 0. Thus, we need to subtract 1 to get to the exact line.
-        # Additionally, we need to subtract 1 more to get to the line above the line with violation.
-        line = linecache.getline( file_with_violation, currentLineNumber )
-        
-        print( "This is the line in the loop:" + line )
+            # getline starts counting from 0. Thus, we need to subtract 1 to get to the exact line.
+            # Additionally, we need to subtract 1 more to get to the line above the line with violation.
+            line = AllLines[ currentLineNumber ]
 
-        if not line:
-            break
+            print( "Below is the line in the loop: " )
+            print( file_with_violation + str( currentLineNumber ) + line )
 
-        if "DHCP" in file_with_violation:
-            print(line)
+            if not line:
+                break
 
-        # Make sure that this is a comment that we are looking at.
-        if line.lstrip().startswith('/*'):
-            if "coverity[misra_c_2012" in line:
-                # A suppression looks like: "/* coverity[misra_c_2012_rule_11_3_violation] */"
-                # The below line gets the 11_3 part from the line.
-                violation_string = ( line.split( "coverity[misra_c_2012_rule_" )[ 1 ] ).split( "_violation" )[ 0 ]
+            if "DHCP" in file_with_violation:
+                print(line)
 
-                # This following line replaces the '_' with a '.'
-                formatted_violation = violation_string.split('_')[0] + "." + violation_string.split('_')[1]
+            # Make sure that this is a comment that we are looking at.
+            if line.lstrip().startswith('/*'):
+                if "coverity[misra_c_2012" in line:
+                    # A suppression looks like: "/* coverity[misra_c_2012_rule_11_3_violation] */"
+                    # The below line gets the 11_3 part from the line.
+                    violation_string = ( line.split( "coverity[misra_c_2012_rule_" )[ 1 ] ).split( "_violation" )[ 0 ]
 
-                if formatted_violation == rule_number:
-                    ViolationSuppressed = True
-                    break
-        else:
-            # If this is not a comment, then we do not need to read any further.
-            break
+                    # This following line replaces the '_' with a '.'
+                    formatted_violation = violation_string.split('_')[0] + "." + violation_string.split('_')[1]
 
-        currentLineNumber -= 1
+                    if formatted_violation == rule_number:
+                        ViolationSuppressed = True
+                        break
+            else:
+                # If this is not a comment, then we do not need to read any further.
+                break
+
+            currentLineNumber -= 1
+
+        fp.close()
         
     return ViolationSuppressed
 
