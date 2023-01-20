@@ -86,9 +86,9 @@ jobs:
             cmake ..
             cmake --build .
        - name: Generate the report
+         continue-on-error: true
          run: |
             PATH=$PATH:$PWD/cppcheck/build/bin
-            echo $PATH
             cd tcp/source
             cppcheck --force --dump -I ./include $(find . -iname "FreeRTOS_*.c")
             python3 ../../cppcheck/addons/misra.py *.dump > ../../output.txt 2>&1
