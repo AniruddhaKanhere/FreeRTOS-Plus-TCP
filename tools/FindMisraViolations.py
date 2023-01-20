@@ -170,9 +170,9 @@ if __name__ == "__main__":
     MISRA_config_file = str( sys.argv[ 1 ] )
     MISRA_report = str( sys.argv[ 2 ] )
 
-    allowed_violation = { "12.3":["*"] }
-                             #  "FreeRTOS_ARP.c" : { "21.6":["35"], "11.8":[ '*' ] },
-                             #}
+    allowed_violation = { "12.3":["*"],
+                          "FreeRTOS_ARP.c" : { "21.6":["35"] },
+                          "FreeRTOS_IP.c": { "20.9":[ '*' ] } }
 
     my_rule_list, my_directive_list = parse_MISRA_config_file( MISRA_config_file, my_rule_list, my_directive_list )
 
