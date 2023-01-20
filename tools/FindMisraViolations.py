@@ -137,7 +137,7 @@ if __name__ == "__main__":
     my_directive_list = []
 
     print(sys.argv)
-    assert( len(sys.argv) is 3 )
+    assert( len(sys.argv) == 3 )
     print( "MISRA Config file provided: " + str( sys.argv[ 1 ] ) )
     print( "MISRA.md file provided: " + str( sys.argv[ 2 ] ) )
 
