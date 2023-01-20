@@ -2,6 +2,7 @@ import sys
 import argparse
 import json
 import linecache
+from tabulate import tabulate
 
 def parse_MISRA_config_file( MISRA_config_file_path, list_of_suppressed_rules, list_of_suppressed_directives ):
     
