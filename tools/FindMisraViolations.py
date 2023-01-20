@@ -39,6 +39,8 @@ def IsSuppressionStatementPresent( file_with_violation, line_number, rule_number
         # getline starts counting from 0. Thus, we need to subtract 1 to get to the exact line.
         # Additionally, we need to subtract 1 more to get to the line above the line with violation.
         line = linecache.getline( file_with_violation, currentLineNumber )
+        
+        print( "This is the line in the loop:" + line )
 
         if not line:
             break
@@ -117,7 +119,7 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
                         # Nothing to be found
                         pass
 
-                print( file_with_violation + ":" + str( line_number ) + "  " + rule_number )
+                print( "***" + file_with_violation + ":" + str( line_number ) + "  " + rule_number )
                 # First try to find the rule in the list of suppressed rules in the coverity config.
                 if found_match is False:
                     print("Nothing found.")
@@ -132,6 +134,7 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
                     found_match = IsSuppressionStatementPresent( file_with_violation, line_number, rule_number )
 
                 if found_match is False:
+                    print("Not found anywhere.")
                     #print( file_with_violation + ":" + str( line_number ) + "  " + rule_number )
                     list_of_new_violations.append([file_with_violation, str( line_number ), rule_number])
                 else:
