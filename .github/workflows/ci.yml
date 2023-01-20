@@ -100,7 +100,7 @@ jobs:
        - name: Check report for new violations 
          run: |
             echo $PWD
-            python3 tcp/tools/FindMisraViolations.py tcp/test/Coverity/coverity_misra.config tcp/output.txt
+            python3 ./tcp/tools/FindMisraViolations.py ./tcp/test/Coverity/coverity_misra.config ./tcp/output.txt
 
   formatting:
     # Use only 18.04 since we want the uncrustify version to
