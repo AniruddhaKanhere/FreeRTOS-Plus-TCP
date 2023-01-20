@@ -174,4 +174,6 @@ if __name__ == "__main__":
     print( "Total new violation(s) introduced: " + str( len( new_violations ) ) )
     
     new_violations.sort()
-    print( tabulate( new_violations, headers=["File name", "Line number", "MISRA rule number"], colalign=("left", "center", "center") ) )
+    
+    if len( new_violations ) > 0:
+        print( tabulate( new_violations, headers=["File name", "Line number", "MISRA rule number"], colalign=("left", "center", "center") ) )
