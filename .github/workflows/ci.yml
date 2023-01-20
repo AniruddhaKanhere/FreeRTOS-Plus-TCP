@@ -92,9 +92,8 @@ jobs:
          continue-on-error: true
          run: |
             PATH=$PATH:$PWD/cppcheck/build/bin
-            cd tcp/source
-            cppcheck --force --dump -I ./include $(find . -iname "FreeRTOS_*.c")
-            python3 ../../cppcheck/addons/misra.py *.dump > ../../output.txt 2>&1
+            cppcheck --force --dump -I ./include $(find . -iwholename "tcp/source/FreeRTOS_*.c")
+            python3 cppcheck/addons/misra.py *.dump > output.txt 2>&1
        - name: Check report for new violations 
          run: |
             python3 tcp/tools/FindMisraViolations.py tcp/test/Coverity/coverity_misra.config output.txt
