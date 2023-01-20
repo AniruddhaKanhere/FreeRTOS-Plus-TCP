@@ -85,6 +85,8 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
             found_match = False
 
             line = report_fd.readline()
+            
+            print( "Reading line: " + line )
 
             if not line:
                 report_fd.close()
@@ -108,6 +110,8 @@ def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_ru
 
                 rule_number = line.split("misra-c2012-")[ 1 ]
                 rule_number = rule_number.split(']')[ 0 ]
+                
+                print( file_with_violation + ":" + str( line_number ) + " " + rule_number )
 
                 # First see whether this violation is allowed (e.g. something which cppcheck doesn't quite understand).
                 if allowed_violations is not None:
