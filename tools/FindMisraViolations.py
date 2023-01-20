@@ -43,6 +43,9 @@ def IsSuppressionStatementPresent( file_with_violation, line_number, rule_number
         if not line:
             break
 
+        if "DHCP" in file_with_violation:
+            print(line)
+
         # Make sure that this is a comment that we are looking at.
         if line.lstrip().startswith('/*'):
             if "coverity[misra_c_2012" in line:
