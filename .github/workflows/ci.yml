@@ -94,9 +94,11 @@ jobs:
             PATH=$PATH:$PWD/cppcheck/build/bin
             cppcheck --force --dump -I ./include $(find . -iwholename "tcp/source/FreeRTOS_*.c")
             python3 cppcheck/addons/misra.py *.dump > output.txt 2>&1
+            echo $PATH
        - name: Check report for new violations 
          run: |
-            python3 tcp/tools/FindMisraViolations.py tcp/test/Coverity/coverity_misra.config output.txt
+            echo $PATH
+            python3 tcp/tools/FindMisraViolations.py tcp/test/Coverity/coverity_misra.config tcp/output.txt
 
   formatting:
     # Use only 18.04 since we want the uncrustify version to
