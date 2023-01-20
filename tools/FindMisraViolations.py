@@ -76,7 +76,11 @@ def IsSuppressionStatementPresent( file_with_violation, line_number, rule_number
 
 def find_new_violations( MISRA_report, allowed_violations, list_of_suppressed_rules, list_of_suppressed_directives ):
     list_of_new_violations = []
+
+    print("Trying to open " + MISRA_report )
+
     with open( MISRA_report ) as report_fd:
+        print( "Opened MISRA report" )
         while True:
             found_match = False
 
@@ -165,6 +169,9 @@ if __name__ == "__main__":
                              #}
 
     my_rule_list, my_directive_list = parse_MISRA_config_file( MISRA_config_file, my_rule_list, my_directive_list )
+    
+    print( "Rules suppressed in config file " + str( len( my_rule_list ) ) )
+    print( "Directives suppressed in config file " + str( len( my_directive_list ) ) )
 
     my_rule_list.sort()
 
