@@ -85,6 +85,9 @@ jobs:
             cd cppcheck; mkdir build; cd build
             cmake ..
             cmake --build .
+       - name: Install tabulate python module
+         run: |
+            pip3 install tabulate
        - name: Generate the report
          continue-on-error: true
          run: |
